@@ -28,11 +28,7 @@ class ShoppingItemDetailViewModel @Inject constructor(
 
     val scrollState = ScrollState(initial = 0)
 
-    fun increaseQuantity() {
-        viewModelScope.launch {
-            _enteredQuantity.emit(++_enteredQuantity.value)
-        }
-    }
+    var id: Int? = null
 
     fun setName(name: TextFieldValue) {
         viewModelScope.launch {
@@ -46,27 +42,69 @@ class ShoppingItemDetailViewModel @Inject constructor(
         }
     }
 
+    fun increaseQuantity() {
+        viewModelScope.launch {
+            _enteredQuantity.emit(++_enteredQuantity.value)
+        }
+    }
+
     fun decreaseQuantity() {
         viewModelScope.launch {
             _enteredQuantity.emit(--_enteredQuantity.value)
         }
     }
 
-    fun saveShoppingItem() {
+    private fun setQuantity(quantity: Int) {
         viewModelScope.launch {
-            detailRepository.saveShoppingItem(
-                ShoppingItem(
-                    name = enteredName.value.text,
-                    description = enteredDescription.value.text.ifEmpty { null },
-                    quantity = enteredQuantity.value
-                )
-            )
+            _enteredQuantity.emit(quantity)
         }
     }
 
-    fun updateShoppingItem(shoppingItem: ShoppingItem) {
+
+    fun setShoppingItem(shoppingItem: ShoppingItem?) {
+        shoppingItem?.let { item ->
+            id = item.id
+            setName(TextFieldValue(item.name))
+            item.description?.let { desc ->
+                setDescription(TextFieldValue(desc))
+            }
+            setQuantity(shoppingItem.quantity)
+        }
+    }
+
+    fun saveShoppingItem() {
+        val shoppingItem = getShoppingItem()
+        if (id == null) {
+            saveItem(shoppingItem)
+        } else {
+            updateShoppingItem(shoppingItem)
+        }
+    }
+
+    private fun saveItem(shoppingItem: ShoppingItem) {
+        viewModelScope.launch {
+            detailRepository.saveShoppingItem(shoppingItem)
+        }
+    }
+
+    private fun updateShoppingItem(shoppingItem: ShoppingItem) {
         viewModelScope.launch {
             detailRepository.updateShoppingItem(shoppingItem)
         }
     }
+
+    private fun getShoppingItem(): ShoppingItem =
+        id?.let {
+            ShoppingItem(
+                id = it,
+                name = enteredName.value.text,
+                description = enteredDescription.value.text.ifEmpty { null },
+                quantity = enteredQuantity.value
+            )
+        } ?: ShoppingItem(
+            name = enteredName.value.text,
+            description = enteredDescription.value.text.ifEmpty { null },
+            quantity = enteredQuantity.value
+        )
+
 }

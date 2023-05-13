@@ -3,6 +3,7 @@ package com.example.shopper
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.Surface
 import com.example.shopper.ui.theme.ShopperTheme
 import com.example.shopper.view.NavGraphs
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -14,7 +15,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ShopperTheme {
-                DestinationsNavHost(navGraph = NavGraphs.root)
+                Surface {
+                    DestinationsNavHost(navGraph = NavGraphs.root)
+                }
             }
         }
     }

@@ -26,10 +26,7 @@ fun AddShoppingItemScreen(
     detailViewModel: ShoppingItemDetailViewModel = hiltViewModel(),
     shoppingItem: ShoppingItem? = null
 ) {
-    shoppingItem?.let {
-
-    }
-
+    detailViewModel.setShoppingItem(shoppingItem)
     val enteredQuantity = detailViewModel.enteredQuantity.collectAsState()
     val enteredName = detailViewModel.enteredName.collectAsState()
     val enteredDescription = detailViewModel.enteredDescription.collectAsState()
