@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.example.shopper.R
 import com.example.shopper.composables.util.noInteractionClickable
 import com.example.shopper.model.db.entity.ShoppingItem
+import com.example.shopper.ui.theme.LocalShopperColorsPalette
 import com.example.shopper.util.logD
 
 @Preview
@@ -55,71 +56,66 @@ fun ShoppingItemCard(
             Text(
                 modifier = Modifier
                     .padding(end = 12.dp)
-                    .background(Color.DarkGray, shape = RoundedCornerShape(12.dp))
+                    .background(
+                        LocalShopperColorsPalette.current.textFieldBg,
+                        shape = RoundedCornerShape(12.dp)
+                    )
                     .padding(horizontal = 10.dp, vertical = 8.dp),
                 text = "${shoppingItem.quantity}",
                 overflow = TextOverflow.Ellipsis,
                 fontSize = 16.sp
             )
-
-//            Column(
-//                verticalArrangement = Arrangement.Center
-//            ) {
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Column(
-                        verticalArrangement = Arrangement.Center
-                    ) {
+                    Text(
+                        modifier = Modifier.padding(end = 8.dp),
+                        text = shoppingItem.name,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+
+                    Spacer(modifier = Modifier.padding(top = 4.dp))
+                    logD("This is the description => ${shoppingItem.description}")
+                    shoppingItem.description?.let { desc ->
+                        logD("Inside description let => ${shoppingItem.description}")
+
                         Text(
-                            modifier = Modifier.padding(end = 8.dp),
-                            text = shoppingItem.name,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-
-                        Spacer(modifier = Modifier.padding(top = 4.dp))
-                        logD("This is the description => ${shoppingItem.description}")
-                        shoppingItem.description?.let { desc ->
-                            logD("Inside description let => ${shoppingItem.description}")
-
-                            Text(
-                                text = desc,
-                                fontSize = 10.sp,
-                                color = Color.Gray
-                            )
-                        }
-
-                    }
-
-                    logD("checkbox recreating ${shoppingItem.isBought}")
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Checkbox(checked = shoppingItem.isBought, onCheckedChange = { checked ->
-                            onBoughtClick(shoppingItem)
-                        })
-
-
-                        Icon(
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clip(CircleShape)
-                                .clickable {
-                                    onOptionsClick(shoppingItem)
-                                }
-                                .padding(4.dp),
-                            painter = painterResource(id = R.drawable.vertical_menu),
-                            contentDescription = "Shopping List Item Options",
+                            text = desc,
+                            fontSize = 10.sp,
+                            color = Color.Gray
                         )
                     }
+
                 }
 
+                logD("checkbox recreating ${shoppingItem.isBought}")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(checked = shoppingItem.isBought, onCheckedChange = { _ ->
+                        onBoughtClick(shoppingItem)
+                    })
 
-
+                    Icon(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clip(CircleShape)
+                            .clickable {
+                                onOptionsClick(shoppingItem)
+                            }
+                            .padding(4.dp),
+                        painter = painterResource(id = R.drawable.vertical_menu),
+                        contentDescription = "Shopping List Item Options",
+                    )
+                }
             }
+
+
         }
     }
-//}
+}
