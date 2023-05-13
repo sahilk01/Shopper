@@ -2,6 +2,7 @@ package com.example.shopper.model.datasource
 
 import com.example.shopper.model.db.entity.ShoppingItem
 import com.example.shopper.model.db.ShoppingItemDao
+import com.example.shopper.util.logD
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -32,6 +33,7 @@ class ShoppingDbDataSource @Inject constructor(
 
     override suspend fun updateShoppingItem(shoppingItem: ShoppingItem) {
         withContext(Dispatchers.IO) {
+            logD("Shopping ITEM while updating from datasource=> $shoppingItem")
             shoppingItemDao.update(shoppingItem = shoppingItem)
         }
     }

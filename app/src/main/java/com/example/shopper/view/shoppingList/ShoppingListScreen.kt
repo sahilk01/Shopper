@@ -76,6 +76,9 @@ fun ShoppingListScreen(
                     },
                     onShoppingItemClick = { selectedShoppingItem ->
                         navigator.navigate(AddShoppingItemScreenDestination(shoppingItem = selectedShoppingItem))
+                    },
+                    onBoughtClick = { shoppingItem ->
+                        shoppingListViewModel.updateBuyState(shoppingItem)
                     }
                 )
             }

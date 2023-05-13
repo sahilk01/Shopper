@@ -19,7 +19,7 @@ data class ShoppingItem(
     val quantity: Int,
 
     @ColumnInfo("description")
-    var description: String? = null,
+    val description: String? = null,
 
     @ColumnInfo("is_bought")
     val isBought: Boolean = false,

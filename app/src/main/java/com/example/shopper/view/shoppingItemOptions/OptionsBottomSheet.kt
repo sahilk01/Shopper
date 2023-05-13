@@ -5,6 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,7 +51,7 @@ fun OptionsBottomSheet(
                 ShopperOutlinedButton(
                     modifier = Modifier.fillMaxWidth(.5f),
                     icon = painterResource(id = R.drawable.edit),
-                    text = "Edit",
+                    text = stringResource(id = R.string.edit),
                     onClick = {
                         onEditClick(selectedItem)
                     }
@@ -61,7 +62,7 @@ fun OptionsBottomSheet(
                 ShopperButton(
                     modifier = Modifier.fillMaxWidth(),
                     icon = painterResource(id = R.drawable.delete_outlined),
-                    text = "Delete",
+                    text = stringResource(id = R.string.delete),
                     onClick = {
                         onDeleteClick(selectedItem)
 

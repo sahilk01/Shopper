@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Shopper</string>
     <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
     <string name="item_name">Item Name</string>
     <string name="item_description">Item Description(Optional)</string>
     <string name="back_button">Back Button</string>

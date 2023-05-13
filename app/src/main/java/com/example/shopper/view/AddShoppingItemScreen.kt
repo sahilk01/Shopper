@@ -34,7 +34,7 @@ fun AddShoppingItemScreen(
     Scaffold(
         topBar = {
             ShopperToolbar(
-                title = stringResource(id = R.string.add),
+                title = stringResource(id = detailViewModel.id?.let { R.string.edit } ?: R.string.add),
                 enableBackButton = true,
                 navigator = navigator
             )
