@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.example.shopper.R
 import com.example.shopper.composables.util.noInteractionClickable
 import com.example.shopper.model.db.entity.ShoppingItem
+import com.example.shopper.util.logD
 
 @Preview
 @Composable
@@ -29,8 +31,10 @@ fun ShoppingItemCard(
     modifier: Modifier = Modifier,
     shoppingItem: ShoppingItem = ShoppingItem.dummyItem,
     onShoppingItemClick: (ShoppingItem) -> Unit = {},
-    onOptionsClick: (ShoppingItem) -> Unit = {}
+    onOptionsClick: (ShoppingItem) -> Unit = {},
+    onBoughtClick: (ShoppingItem) -> Unit = {},
 ) {
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -58,17 +62,17 @@ fun ShoppingItemCard(
                 fontSize = 16.sp
             )
 
-            Column(
-                verticalArrangement = Arrangement.Center
-            ) {
+//            Column(
+//                verticalArrangement = Arrangement.Center
+//            ) {
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        verticalArrangement = Arrangement.Center
                     ) {
                         Text(
                             modifier = Modifier.padding(end = 8.dp),
@@ -76,33 +80,46 @@ fun ShoppingItemCard(
                             overflow = TextOverflow.Ellipsis,
                         )
 
+                        Spacer(modifier = Modifier.padding(top = 4.dp))
+                        logD("This is the description => ${shoppingItem.description}")
+                        shoppingItem.description?.let { desc ->
+                            logD("Inside description let => ${shoppingItem.description}")
+
+                            Text(
+                                text = desc,
+                                fontSize = 10.sp,
+                                color = Color.Gray
+                            )
+                        }
 
                     }
 
-                    Icon(
-                        modifier = Modifier
-                            .size(24.dp)
-                            .clip(CircleShape)
-                            .clickable {
-                                onOptionsClick(shoppingItem)
-                            }
-                            .padding(4.dp),
-                        painter = painterResource(id = R.drawable.vertical_menu),
-                        contentDescription = "Shopping List Item Options",
-                    )
+                    logD("checkbox recreating ${shoppingItem.isBought}")
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(checked = shoppingItem.isBought, onCheckedChange = { checked ->
+                            onBoughtClick(shoppingItem)
+                        })
+
+
+                        Icon(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clip(CircleShape)
+                                .clickable {
+                                    onOptionsClick(shoppingItem)
+                                }
+                                .padding(4.dp),
+                            painter = painterResource(id = R.drawable.vertical_menu),
+                            contentDescription = "Shopping List Item Options",
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.padding(top = 4.dp))
 
-                shoppingItem.description?.let { desc ->
-                    Text(
-                        text = desc,
-                        fontSize = 10.sp,
-                        color = Color.Gray
-                    )
-                }
 
             }
         }
     }
-}
+//}

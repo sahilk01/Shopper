@@ -93,18 +93,16 @@ class ShoppingItemDetailViewModel @Inject constructor(
         }
     }
 
-    private fun getShoppingItem(): ShoppingItem =
-        id?.let {
-            ShoppingItem(
-                id = it,
-                name = enteredName.value.text,
-                description = enteredDescription.value.text.ifEmpty { null },
-                quantity = enteredQuantity.value
-            )
-        } ?: ShoppingItem(
+    private fun getShoppingItem(): ShoppingItem {
+        val shoppingItem = ShoppingItem(
             name = enteredName.value.text,
             description = enteredDescription.value.text.ifEmpty { null },
             quantity = enteredQuantity.value
         )
+        return id?.let {
+            shoppingItem.copy(id = it)
+        } ?: shoppingItem
+    }
+
 
 }

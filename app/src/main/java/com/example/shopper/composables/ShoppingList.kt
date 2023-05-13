@@ -9,14 +9,16 @@ import com.example.shopper.model.db.entity.ShoppingItem
 fun ShoppingList(
     shoppingList: List<ShoppingItem> = ShoppingItem.dummyList,
     onShoppingItemClick: (ShoppingItem) -> Unit = {},
-    onOptionsClick: (ShoppingItem) -> Unit = {}
+    onOptionsClick: (ShoppingItem) -> Unit = {},
+    onBoughtClick: (ShoppingItem) -> Unit = {}
 ) {
     LazyColumn {
         items(shoppingList) { shoppingItem ->
             ShoppingItemCard(
                 shoppingItem = shoppingItem,
                 onShoppingItemClick = onShoppingItemClick,
-                onOptionsClick = onOptionsClick
+                onOptionsClick = onOptionsClick,
+                onBoughtClick = onBoughtClick
             )
         }
     }
