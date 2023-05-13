@@ -41,6 +41,6 @@ fun ShopperTextField(
             unfocusedIndicatorColor = Color.Transparent,
             textColor = Color.Black
         ),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
     )
 }
