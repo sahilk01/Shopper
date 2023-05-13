@@ -43,6 +43,7 @@ fun ShoppingListScreen(
                 selectedShoppingItem = shoppingListViewModel.getSelectedShopping(),
                 onEditClick = { shoppingItem ->
                     coroutineScope.launch { sheetState.hide() }
+                    navigator.navigate(AddShoppingItemScreenDestination(shoppingItem = shoppingItem))
                 },
                 onDeleteClick = { shoppingItem ->
                     shoppingListViewModel.deleteShoppingItem(shoppingItem)
@@ -57,7 +58,7 @@ fun ShoppingListScreen(
             floatingActionButton = {
                 ShopperFAB(icon = R.drawable.add,
                     onClick = {
-                        navigator.navigate(AddShoppingItemScreenDestination)
+                        navigator.navigate(AddShoppingItemScreenDestination())
                     })
             },
             ) {
@@ -72,6 +73,9 @@ fun ShoppingListScreen(
                         coroutineScope.launch {
                             sheetState.show()
                         }
+                    },
+                    onShoppingItemClick = { selectedShoppingItem ->
+                        navigator.navigate(AddShoppingItemScreenDestination(shoppingItem = selectedShoppingItem))
                     }
                 )
             }

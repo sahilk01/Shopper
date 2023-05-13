@@ -1,6 +1,8 @@
 package com.example.shopper.view
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -21,8 +23,17 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun AddShoppingItemScreen(
     navigator: DestinationsNavigator,
-    detailViewModel: ShoppingItemDetailViewModel = hiltViewModel()
+    detailViewModel: ShoppingItemDetailViewModel = hiltViewModel(),
+    shoppingItem: ShoppingItem? = null
 ) {
+    shoppingItem?.let {
+
+    }
+
+    val enteredQuantity = detailViewModel.enteredQuantity.collectAsState()
+    val enteredName = detailViewModel.enteredName.collectAsState()
+    val enteredDescription = detailViewModel.enteredDescription.collectAsState()
+
     Scaffold(
         topBar = {
             ShopperToolbar(
@@ -34,21 +45,10 @@ fun AddShoppingItemScreen(
     ) {
         Column(
             Modifier
+                .verticalScroll(detailViewModel.scrollState)
                 .padding(it)
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
-
-            var enteredName by remember {
-                mutableStateOf(TextFieldValue(""))
-            }
-
-            var enteredDescription by remember {
-                mutableStateOf(TextFieldValue(""))
-            }
-
-            var enteredQuantity by remember {
-                mutableStateOf(1)
-            }
 
             TextLabel(text = stringResource(R.string.name))
 
@@ -56,9 +56,9 @@ fun AddShoppingItemScreen(
 
 
             ShopperTextField(
-                value = enteredName,
+                value = enteredName.value,
                 onValueChange = { name ->
-                    enteredName = name
+                    detailViewModel.setName(name)
                 },
                 placeholder = stringResource(id = R.string.item_name)
             )
@@ -71,12 +71,12 @@ fun AddShoppingItemScreen(
             Spacer(modifier = Modifier.padding(top = 16.dp))
 
             ShopperNumberPicker(
-                count = enteredQuantity,
+                count = enteredQuantity.value,
                 onDecreaseClick = {
-                    enteredQuantity--
+                    detailViewModel.decreaseQuantity()
                 },
                 onIncreaseClick = {
-                    enteredQuantity++
+                    detailViewModel.increaseQuantity()
                 }
             )
 
@@ -88,9 +88,9 @@ fun AddShoppingItemScreen(
 
             ShopperTextField(
                 modifier = Modifier.height(150.dp),
-                value = enteredDescription,
-                onValueChange = { name ->
-                    enteredDescription = name
+                value = enteredDescription.value,
+                onValueChange = { description ->
+                    detailViewModel.setDescription(description)
                 },
                 placeholder = stringResource(id = R.string.item_description)
             )
@@ -102,14 +102,9 @@ fun AddShoppingItemScreen(
                     .fillMaxWidth()
                     .padding(),
                 text = stringResource(R.string.save),
+                isEnabled = enteredName.value.text.isNotEmpty(),
                 onClick = {
-                    detailViewModel.saveShoppingItem(
-                        ShoppingItem(
-                            name = enteredName.text,
-                            description = enteredDescription.text,
-                            quantity = enteredQuantity
-                        )
-                    )
+                    detailViewModel.saveShoppingItem()
                     navigator.navigateUp()
                 }
             )

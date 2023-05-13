@@ -1,9 +1,12 @@
 package com.example.shopper.model.db.entity
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = ShoppingItem.TABLE_NAME)
 data class ShoppingItem(
     @PrimaryKey(autoGenerate = true)
@@ -16,11 +19,12 @@ data class ShoppingItem(
     val quantity: Int,
 
     @ColumnInfo("description")
-    val description: String? = null,
+    var description: String? = null,
 
     @ColumnInfo("is_bought")
     val isBought: Boolean = false,
-) {
+): Parcelable {
+
     companion object {
         const val TABLE_NAME = "shopping_item"
 

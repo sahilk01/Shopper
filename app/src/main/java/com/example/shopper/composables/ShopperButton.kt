@@ -17,6 +17,7 @@ fun ShopperButton(
     text: String? = null,
     contentPadding: PaddingValues = PaddingValues(vertical = 12.dp),
     icon: Painter? = null,
+    isEnabled: Boolean = true,
     onClick: () -> Unit = {},
 ) {
     Button(
@@ -24,6 +25,7 @@ fun ShopperButton(
         shape = RoundedCornerShape(32.dp),
         onClick = onClick,
         contentPadding = contentPadding,
+        enabled = isEnabled,
     ) {
         icon?.let {
             Icon(
