@@ -41,17 +41,6 @@ class ShoppingListRepositoryImpl @Inject constructor(
         return null
     }
 
-    override suspend fun filterShoppingList(filter: FilterAction, sorting: Int): Flow<List<ShoppingItem>>? {
-        dataSources.forEach { shoppingItemDataSource ->
-            if (shoppingItemDataSource is ShoppingDbDataSource) {
-                return shoppingItemDataSource.filterShoppingList(filter, sorting)
-            } else {
-                shoppingItemDataSource.filterShoppingList(filter, sorting)
-            }
-        }
-        return null
-    }
-
     override suspend fun searchShoppingList(
         searchQuery: String,
         selectedFilter: FilterAction?,

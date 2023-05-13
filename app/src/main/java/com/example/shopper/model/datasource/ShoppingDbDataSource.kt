@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class ShoppingDbDataSource @Inject constructor(
     private val shoppingItemDao: ShoppingItemDao,
-): ShoppingItemDataSource {
+) : ShoppingItemDataSource {
     override suspend fun addShoppingItem(vararg shoppingItem: ShoppingItem) {
         withContext(Dispatchers.IO) {
             shoppingItemDao.insert(shoppingItem = shoppingItem)
@@ -39,14 +39,6 @@ class ShoppingDbDataSource @Inject constructor(
         withContext(Dispatchers.IO) {
             logD("Shopping ITEM while updating from datasource=> $shoppingItem")
             shoppingItemDao.update(shoppingItem = shoppingItem)
-        }
-    }
-
-    override suspend fun filterShoppingList(filter: FilterAction, sorting: Int): Flow<List<ShoppingItem>> {
-        return if (filter == FilterAction.Unbought) {
-            shoppingItemDao.getUnBoughtSortedItems(sorting)
-        } else {
-            shoppingItemDao.getBoughtSortedItems(sorting)
         }
     }
 
