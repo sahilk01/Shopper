@@ -50,20 +50,10 @@ fun ShopperToolbar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (enableBackButton) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(end = 10.dp)
-                            .size(32.dp)
-                            .clip(CircleShape)
-                            .clickable {
-                                navigator?.navigateUp()
-                                onBackClick()
-                            }
-                            .padding(6.dp),
-                        painter = painterResource(id = R.drawable.arrow_back),
-                        contentDescription = stringResource(R.string.back_button),
-                        tint = Color.White
-                    )
+                    BackButton {
+                        navigator?.navigateUp()
+                        onBackClick()
+                    }
                 }
                 Text(text = title, fontWeight = FontWeight.Bold, color = White)
             }

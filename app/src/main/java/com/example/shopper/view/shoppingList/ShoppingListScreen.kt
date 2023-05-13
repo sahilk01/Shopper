@@ -68,9 +68,15 @@ fun ShoppingListScreen(
                         onSearch = { searchQuery ->
                         logD("Search Item => $searchQuery")
                             shoppingListViewModel.search(searchQuery)
-                    })
+                        },
+                        onBackPress = {
+                            shoppingListViewModel.search("")
+                            showSearch = false
+                        }
+                    )
 
                     BackHandler(showSearch) {
+                        shoppingListViewModel.search("")
                         showSearch = false
                     }
                 } else {

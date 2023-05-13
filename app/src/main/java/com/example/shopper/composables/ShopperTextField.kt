@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.shopper.R
+import com.example.shopper.ui.theme.LocalShopperColorsPalette
 import com.example.shopper.ui.theme.SuperLightGray
 
 @Composable
@@ -36,10 +37,10 @@ fun ShopperTextField(
             )
         },
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = SuperLightGray,
+            backgroundColor = LocalShopperColorsPalette.current.textFieldBg,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-            textColor = Color.Black
+//            textColor = Color.Black
         ),
         shape = RoundedCornerShape(8.dp),
     )

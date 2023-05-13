@@ -16,7 +16,6 @@ fun TextLabel(
     Text(
         modifier = modifier,
         text = text,
-        color = color,
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold
     )
