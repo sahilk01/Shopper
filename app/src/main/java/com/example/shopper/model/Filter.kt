@@ -14,10 +14,6 @@ data class Filter(
                 isSelected = false,
                 filterType = FilterAction.Bought
             ),
-//            Filter(
-//                isSelected = false,
-//                filterType = FilterAction.All
-//            ),
         )
     }
 }
@@ -25,5 +21,4 @@ data class Filter(
 enum class FilterAction {
     Unbought,
     Bought,
-//    All,
 }

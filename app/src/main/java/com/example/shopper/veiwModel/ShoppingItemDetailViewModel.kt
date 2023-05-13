@@ -104,5 +104,4 @@ class ShoppingItemDetailViewModel @Inject constructor(
         } ?: shoppingItem
     }
 
-
 }

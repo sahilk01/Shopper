@@ -1,7 +1,6 @@
 package com.example.shopper.model
 
 import androidx.annotation.DrawableRes
-import androidx.compose.ui.graphics.painter.Painter
 import com.example.shopper.R
 
 data class Option(

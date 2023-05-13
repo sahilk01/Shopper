@@ -52,15 +52,6 @@ class ShoppingListViewModel @Inject constructor(
         applyFilter(selectedFilter, selectedSort, updateInUi = false)
     }
 
-    private fun getFullShoppingListItems() {
-        viewModelScope.launch {
-            shoppingListRepository.getAllShoppingItems()?.collect { shoppingList ->
-                logD("Shopping after collecting from db in view model => $shoppingList")
-                _fullShoppingList.emit(shoppingList)
-            }
-        }
-    }
-
     fun deleteShoppingItem(shoppingItem: ShoppingItem) {
         viewModelScope.launch {
             shoppingListRepository.deleteShoppingItem(shoppingItem)
@@ -157,6 +148,10 @@ class ShoppingListViewModel @Inject constructor(
                 _showEmptyLayout.emit(shoppingList.isEmpty())
             }
         }
+    }
+
+    fun clearSearch() {
+        search("")
     }
 
 }

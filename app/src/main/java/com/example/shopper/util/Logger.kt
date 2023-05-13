@@ -7,7 +7,7 @@ fun logD(
     message: String,
     tag: String = "shoppinglist",
 ) {
-//    if (BuildConfig.DEBUG) {
+    if (BuildConfig.DEBUG) {
         Log.d(tag, message)
-//    }
+    }
 }

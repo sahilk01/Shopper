@@ -1,11 +1,8 @@
 package com.example.shopper.model.db
 
 import androidx.room.*
-import com.example.shopper.model.FilterAction
-import com.example.shopper.model.Sort
 import com.example.shopper.model.db.entity.ShoppingItem
 import kotlinx.coroutines.flow.Flow
-import java.util.logging.Filter
 
 @Dao
 interface ShoppingItemDao {
