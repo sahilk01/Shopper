@@ -32,7 +32,7 @@ class ShoppingDbDataSource @Inject constructor(
 
     override suspend fun updateShoppingItem(shoppingItem: ShoppingItem) {
         withContext(Dispatchers.IO) {
-            updateShoppingItem(shoppingItem = shoppingItem)
+            shoppingItemDao.update(shoppingItem = shoppingItem)
         }
     }
 }
