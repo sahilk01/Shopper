@@ -37,7 +37,6 @@ class ShoppingDbDataSource @Inject constructor(
 
     override suspend fun updateShoppingItem(shoppingItem: ShoppingItem) {
         withContext(Dispatchers.IO) {
-            logD("Shopping ITEM while updating from datasource=> $shoppingItem")
             shoppingItemDao.update(shoppingItem = shoppingItem)
         }
     }

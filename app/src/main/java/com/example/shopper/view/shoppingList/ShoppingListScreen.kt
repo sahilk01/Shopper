@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -53,6 +52,7 @@ fun ShoppingListScreen(
                 selectedShoppingItem = shoppingListViewModel.getSelectedShopping(),
                 onEditClick = { shoppingItem ->
                     coroutineScope.launch { sheetState.hide() }
+                    shoppingListViewModel.clearSearch()
                     navigator.navigate(AddShoppingItemScreenDestination(shoppingItem = shoppingItem))
                 },
                 onDeleteClick = { shoppingItem ->
@@ -70,13 +70,13 @@ fun ShoppingListScreen(
                             shoppingListViewModel.search(searchQuery)
                         },
                         onBackPress = {
-                            shoppingListViewModel.search("")
+                            shoppingListViewModel.clearSearch()
                             showSearch = false
                         }
                     )
 
                     BackHandler(showSearch) {
-                        shoppingListViewModel.search("")
+                        shoppingListViewModel.clearSearch()
                         showSearch = false
                     }
                 } else {
@@ -92,6 +92,7 @@ fun ShoppingListScreen(
             floatingActionButton = {
                 ShopperFAB(icon = R.drawable.add,
                     onClick = {
+                        shoppingListViewModel.clearSearch()
                         navigator.navigate(AddShoppingItemScreenDestination())
                     })
             },
@@ -122,6 +123,7 @@ fun ShoppingListScreen(
                         }
                     },
                     onShoppingItemClick = { selectedShoppingItem ->
+                        shoppingListViewModel.clearSearch()
                         navigator.navigate(AddShoppingItemScreenDestination(shoppingItem = selectedShoppingItem))
                     },
                     onBoughtClick = { shoppingItem ->

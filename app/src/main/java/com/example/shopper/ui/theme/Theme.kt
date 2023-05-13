@@ -21,15 +21,6 @@ private val LightColorPalette = lightColors(
     primaryVariant = DarkBlue,
     secondary = OrangishYellow,
     secondaryVariant = Pink
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
 )
 @Composable
 fun ShopperTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {

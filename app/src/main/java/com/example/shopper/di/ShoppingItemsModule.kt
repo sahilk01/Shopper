@@ -27,8 +27,4 @@ abstract class ShoppingItemsModule {
         shoppingDetailRepository: ShoppingDetailRepositoryImpl
     ): ShoppingItemDetailRepository
 
-//    @Binds
-//    abstract fun provideShoppingDbDataSource(
-//        shoppingDbDataSource: ShoppingDbDataSource
-//    ): ShoppingItemDataSource
 }
