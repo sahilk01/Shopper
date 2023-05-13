@@ -1,5 +1,8 @@
 package com.example.shopper.model.datasource
 
+import com.example.shopper.model.Filter
+import com.example.shopper.model.FilterAction
+import com.example.shopper.model.Sorting
 import com.example.shopper.model.db.entity.ShoppingItem
 import com.example.shopper.model.db.ShoppingItemDao
 import com.example.shopper.util.logD
@@ -35,6 +38,14 @@ class ShoppingDbDataSource @Inject constructor(
         withContext(Dispatchers.IO) {
             logD("Shopping ITEM while updating from datasource=> $shoppingItem")
             shoppingItemDao.update(shoppingItem = shoppingItem)
+        }
+    }
+
+    override suspend fun filterShoppingList(filter: FilterAction, sorting: Int): Flow<List<ShoppingItem>> {
+        return if (filter == FilterAction.Unbought) {
+            shoppingItemDao.getUnBoughtSortedItems(sorting)
+        } else {
+            shoppingItemDao.getBoughtSortedItems(sorting)
         }
     }
 }

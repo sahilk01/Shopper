@@ -21,6 +21,21 @@ interface ShoppingItemDao {
     @Query("SELECT * FROM ${ShoppingItem.TABLE_NAME}")
     fun getAll(): Flow<List<ShoppingItem>>
 
+    @Query("SELECT * FROM ${ShoppingItem.TABLE_NAME} ORDER BY " +
+            "CASE WHEN :isAscending = 1 THEN name END ASC, " +
+            "CASE WHEN :isAscending = 2 THEN name END DESC")
+    fun getSortedItemsByName(isAscending: Int): Flow<List<ShoppingItem>>
+
+    @Query("SELECT * FROM ${ShoppingItem.TABLE_NAME} WHERE is_bought=1 ORDER BY " +
+            "CASE WHEN :isAscending = 1 THEN name END ASC, " +
+            "CASE WHEN :isAscending = 2 THEN name END DESC")
+    fun getBoughtSortedItems(isAscending: Int): Flow<List<ShoppingItem>>
+
+    @Query("SELECT * FROM ${ShoppingItem.TABLE_NAME} WHERE is_bought=0 ORDER BY " +
+            "CASE WHEN :isAscending = 1 THEN name END ASC, " +
+            "CASE WHEN :isAscending = 2 THEN name END DESC")
+    fun getUnBoughtSortedItems(isAscending: Int): Flow<List<ShoppingItem>>
+
     @Query("SELECT * FROM ${ShoppingItem.TABLE_NAME} WHERE id=:id")
     fun getByID(id: Int): Flow<ShoppingItem>
 
