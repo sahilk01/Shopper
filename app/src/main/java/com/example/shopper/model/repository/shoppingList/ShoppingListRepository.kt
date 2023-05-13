@@ -26,13 +26,6 @@ interface ShoppingListRepository {
     suspend fun getShoppingItem(id: Int): Flow<ShoppingItem>?
 
     /**
-      Filter Shopping List.
-    */
-
-    suspend fun filterShoppingList(filter: FilterAction, sorting: Int = Sorting.Ascending.value): Flow<List<ShoppingItem>>?
-
-
-    /**
     Search in Shopping List with keeping already Applied Filter/Sort.
      */
 

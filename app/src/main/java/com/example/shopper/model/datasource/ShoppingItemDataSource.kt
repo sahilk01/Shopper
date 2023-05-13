@@ -37,12 +37,6 @@ interface ShoppingItemDataSource {
 
     suspend fun updateShoppingItem(shoppingItem: ShoppingItem)
 
-    /**
-    Filter and Sort Shopping List.
-     */
-
-    suspend fun filterShoppingList(filter: FilterAction, sorting: Int = Sorting.Ascending.value): Flow<List<ShoppingItem>>
-
 
     suspend fun searchShoppingList(searchQuery: String, selectedFilter: FilterAction? = null, selectedSorting: Sorting? = null): Flow<List<ShoppingItem>>
 }
