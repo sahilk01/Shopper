@@ -10,4 +10,6 @@
     <string name="name">Name</string>
     <string name="quantity">Quantity</string>
     <string name="description">Description (Optional)</string>
+    <string name="no_data_found">No Data Found</string>
+    <string name="no_shopping_item_found">No Shopping Item Found.</string>
 </resources>

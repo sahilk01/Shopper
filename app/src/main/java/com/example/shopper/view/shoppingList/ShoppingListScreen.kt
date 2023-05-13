@@ -3,8 +3,10 @@
 package com.example.shopper.view.shoppingList
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,6 +37,9 @@ fun ShoppingListScreen(
     val sheetState = configureSheetState(coroutineScope = coroutineScope)
 
     val shoppingList = shoppingListViewModel.fullShoppingList.collectAsState()
+    val showEmptyLayout = shoppingListViewModel.showEmptyLayout.collectAsState()
+    val filters = shoppingListViewModel.filter.collectAsState()
+    val sortings = shoppingListViewModel.sortings.collectAsState()
 
     ShopperBottomSheetLayout(
         sheetState = sheetState,
@@ -65,9 +70,27 @@ fun ShoppingListScreen(
             Column(
                 modifier = Modifier.padding(it)
             ) {
+
+                Row {
+//                    item {
+                        FilterOptions(
+                            filters = filters.value,
+                            onFilterSelected = { selectedFilter ->
+                                shoppingListViewModel.applyFilter(selectedFilter.filterType)
+                            })
+
+
+//                    }
+//                    item {
+                        SortingOptions(sortings = sortings.value, onSortSelected = { selectedSort ->
+                            shoppingListViewModel.applySort(selectedSort.type)
+                        })
+//                    }
+                }
                 Spacer(modifier = Modifier.padding(top = 16.dp))
                 ShoppingList(
                     shoppingList = shoppingList.value,
+                    showEmptyLayout = showEmptyLayout.value,
                     onOptionsClick = { selectedShoppingItem ->
                         shoppingListViewModel.setSelectedShopping(selectedShoppingItem)
                         coroutineScope.launch {
