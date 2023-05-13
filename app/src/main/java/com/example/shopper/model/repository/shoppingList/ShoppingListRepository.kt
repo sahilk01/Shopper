@@ -1,6 +1,7 @@
 package com.example.shopper.model.repository.shoppingList
 
 import com.example.shopper.model.FilterAction
+import com.example.shopper.model.Sort
 import com.example.shopper.model.Sorting
 import com.example.shopper.model.db.entity.ShoppingItem
 import kotlinx.coroutines.flow.Flow
@@ -29,4 +30,11 @@ interface ShoppingListRepository {
     */
 
     suspend fun filterShoppingList(filter: FilterAction, sorting: Int = Sorting.Ascending.value): Flow<List<ShoppingItem>>?
+
+
+    /**
+    Search in Shopping List with keeping already Applied Filter/Sort.
+     */
+
+    suspend fun searchShoppingList(searchQuery: String, selectedFilter: FilterAction? = null, selectedSorting: Sorting? = null): Flow<List<ShoppingItem>>?
 }

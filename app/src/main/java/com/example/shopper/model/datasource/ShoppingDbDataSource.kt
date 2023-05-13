@@ -2,6 +2,7 @@ package com.example.shopper.model.datasource
 
 import com.example.shopper.model.Filter
 import com.example.shopper.model.FilterAction
+import com.example.shopper.model.Sort
 import com.example.shopper.model.Sorting
 import com.example.shopper.model.db.entity.ShoppingItem
 import com.example.shopper.model.db.ShoppingItemDao
@@ -48,4 +49,13 @@ class ShoppingDbDataSource @Inject constructor(
             shoppingItemDao.getBoughtSortedItems(sorting)
         }
     }
+
+    override suspend fun searchShoppingList(
+        searchQuery: String,
+        selectedFilter: FilterAction?,
+        selectedSorting: Sorting?
+    ): Flow<List<ShoppingItem>> {
+        return shoppingItemDao.search(searchQuery, selectedFilter?.ordinal, selectedSorting?.value)
+    }
+
 }

@@ -2,6 +2,8 @@ package com.example.shopper.model.repository.shoppingList
 
 import com.example.shopper.model.Filter
 import com.example.shopper.model.FilterAction
+import com.example.shopper.model.Sort
+import com.example.shopper.model.Sorting
 import com.example.shopper.model.db.entity.ShoppingItem
 import com.example.shopper.model.datasource.ShoppingDbDataSource
 import com.example.shopper.model.datasource.ShoppingItemDataSource
@@ -45,6 +47,21 @@ class ShoppingListRepositoryImpl @Inject constructor(
                 return shoppingItemDataSource.filterShoppingList(filter, sorting)
             } else {
                 shoppingItemDataSource.filterShoppingList(filter, sorting)
+            }
+        }
+        return null
+    }
+
+    override suspend fun searchShoppingList(
+        searchQuery: String,
+        selectedFilter: FilterAction?,
+        selectedSorting: Sorting?
+    ): Flow<List<ShoppingItem>>? {
+        dataSources.forEach { shoppingItemDataSource ->
+            if (shoppingItemDataSource is ShoppingDbDataSource) {
+                return shoppingItemDataSource.searchShoppingList(searchQuery, selectedFilter, selectedSorting)
+            } else {
+                shoppingItemDataSource.searchShoppingList(searchQuery, selectedFilter, selectedSorting)
             }
         }
         return null

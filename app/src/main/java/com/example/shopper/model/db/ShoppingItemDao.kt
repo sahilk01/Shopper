@@ -1,8 +1,11 @@
 package com.example.shopper.model.db
 
 import androidx.room.*
+import com.example.shopper.model.FilterAction
+import com.example.shopper.model.Sort
 import com.example.shopper.model.db.entity.ShoppingItem
 import kotlinx.coroutines.flow.Flow
+import java.util.logging.Filter
 
 @Dao
 interface ShoppingItemDao {
@@ -21,20 +24,37 @@ interface ShoppingItemDao {
     @Query("SELECT * FROM ${ShoppingItem.TABLE_NAME}")
     fun getAll(): Flow<List<ShoppingItem>>
 
-    @Query("SELECT * FROM ${ShoppingItem.TABLE_NAME} ORDER BY " +
-            "CASE WHEN :isAscending = 1 THEN name END ASC, " +
-            "CASE WHEN :isAscending = 2 THEN name END DESC")
+    @Query(
+        "SELECT * FROM ${ShoppingItem.TABLE_NAME} ORDER BY " +
+                "CASE WHEN :isAscending = 1 THEN name END ASC, " +
+                "CASE WHEN :isAscending = 2 THEN name END DESC"
+    )
     fun getSortedItemsByName(isAscending: Int): Flow<List<ShoppingItem>>
 
-    @Query("SELECT * FROM ${ShoppingItem.TABLE_NAME} WHERE is_bought=1 ORDER BY " +
-            "CASE WHEN :isAscending = 1 THEN name END ASC, " +
-            "CASE WHEN :isAscending = 2 THEN name END DESC")
+    @Query(
+        "SELECT * FROM ${ShoppingItem.TABLE_NAME} WHERE is_bought=1 ORDER BY " +
+                "CASE WHEN :isAscending = 1 THEN name END ASC, " +
+                "CASE WHEN :isAscending = 2 THEN name END DESC"
+    )
     fun getBoughtSortedItems(isAscending: Int): Flow<List<ShoppingItem>>
 
-    @Query("SELECT * FROM ${ShoppingItem.TABLE_NAME} WHERE is_bought=0 ORDER BY " +
-            "CASE WHEN :isAscending = 1 THEN name END ASC, " +
-            "CASE WHEN :isAscending = 2 THEN name END DESC")
+    @Query(
+        "SELECT * FROM ${ShoppingItem.TABLE_NAME} WHERE is_bought=0 ORDER BY " +
+                "CASE WHEN :isAscending = 1 THEN name END ASC, " +
+                "CASE WHEN :isAscending = 2 THEN name END DESC"
+    )
     fun getUnBoughtSortedItems(isAscending: Int): Flow<List<ShoppingItem>>
+
+
+    @Query(
+        "SELECT * FROM ${ShoppingItem.TABLE_NAME} WHERE name LIKE '%' || :searchQuery || '%' " +
+                "AND is_bought=:filter " +
+                "OR description LIKE '%' || :searchQuery || '%' " +
+                "AND is_bought=:filter ORDER BY " +
+                "CASE WHEN :sort = 1 THEN name END ASC, " +
+                "CASE WHEN :sort = 2 THEN name END DESC"
+    )
+    fun search(searchQuery: String, filter: Int?, sort: Int?): Flow<List<ShoppingItem>>
 
     @Query("SELECT * FROM ${ShoppingItem.TABLE_NAME} WHERE id=:id")
     fun getByID(id: Int): Flow<ShoppingItem>

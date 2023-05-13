@@ -2,20 +2,22 @@
 
 package com.example.shopper.view.shoppingList
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.shopper.R
 import com.example.shopper.composables.*
+import com.example.shopper.model.Option
+import com.example.shopper.model.OptionType
+import com.example.shopper.util.logD
 import com.example.shopper.veiwModel.ShoppingListViewModel
 import com.example.shopper.view.destinations.AddShoppingItemScreenDestination
 import com.example.shopper.view.shoppingItemOptions.OptionsBottomSheet
@@ -40,6 +42,9 @@ fun ShoppingListScreen(
     val showEmptyLayout = shoppingListViewModel.showEmptyLayout.collectAsState()
     val filters = shoppingListViewModel.filter.collectAsState()
     val sortings = shoppingListViewModel.sortings.collectAsState()
+    var showSearch by remember {
+        mutableStateOf(false)
+    }
 
     ShopperBottomSheetLayout(
         sheetState = sheetState,
@@ -58,7 +63,25 @@ fun ShoppingListScreen(
         }) {
         Scaffold(
             topBar = {
-                ShopperToolbar()
+                if (showSearch) {
+                    SearchField(
+                        onSearch = { searchQuery ->
+                        logD("Search Item => $searchQuery")
+                            shoppingListViewModel.search(searchQuery)
+                    })
+
+                    BackHandler(showSearch) {
+                        showSearch = false
+                    }
+                } else {
+                    ShopperToolbar(options = Option.getShoppingListOptions { optionType ->
+                        when(optionType) {
+                            OptionType.Search -> {
+                                showSearch = true
+                            }
+                        }
+                    })
+                }
             },
             floatingActionButton = {
                 ShopperFAB(icon = R.drawable.add,
@@ -72,20 +95,15 @@ fun ShoppingListScreen(
             ) {
 
                 Row {
-//                    item {
                         FilterOptions(
                             filters = filters.value,
                             onFilterSelected = { selectedFilter ->
                                 shoppingListViewModel.applyFilter(selectedFilter.filterType)
                             })
 
-
-//                    }
-//                    item {
                         SortingOptions(sortings = sortings.value, onSortSelected = { selectedSort ->
                             shoppingListViewModel.applySort(selectedSort.type)
                         })
-//                    }
                 }
                 Spacer(modifier = Modifier.padding(top = 16.dp))
                 ShoppingList(

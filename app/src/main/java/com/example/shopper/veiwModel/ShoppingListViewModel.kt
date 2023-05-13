@@ -40,6 +40,8 @@ class ShoppingListViewModel @Inject constructor(
     private val _showEmptyLayout = MutableStateFlow(false)
     val showEmptyLayout get() = _showEmptyLayout.asStateFlow()
 
+    private var searchQuery: String? = null
+
     fun setSelectedShopping(selectedShoppingItem: ShoppingItem) {
         this.selectedShoppingItem = selectedShoppingItem
     }
@@ -96,8 +98,7 @@ class ShoppingListViewModel @Inject constructor(
         this.selectedSort = sorting
         if (updateInUi) updateFiltersInUi(selectedFilter)
         dataJob = viewModelScope.launch {
-            shoppingListRepository.filterShoppingList(selectedFilter, sorting.value)?.collect { shoppingList ->
-                logD("This is the return after $shoppingList")
+            shoppingListRepository.searchShoppingList(searchQuery.orEmpty(), selectedFilter, sorting)?.collect { shoppingList ->
                 _fullShoppingList.emit(shoppingList)
                 _showEmptyLayout.emit(shoppingList.isEmpty())
             }
@@ -125,7 +126,7 @@ class ShoppingListViewModel @Inject constructor(
         this.selectedSort = sorting
         updateSortInUi(sorting)
         dataJob = viewModelScope.launch {
-            shoppingListRepository.filterShoppingList(selectedFilter, sorting.value)?.collect { shoppingList ->
+            shoppingListRepository.searchShoppingList(searchQuery.orEmpty(), selectedFilter, sorting)?.collect { shoppingList ->
                 _fullShoppingList.emit(shoppingList)
                 _showEmptyLayout.emit(shoppingList.isEmpty())
             }
@@ -144,6 +145,17 @@ class ShoppingListViewModel @Inject constructor(
                 )
             }
             _sortings.emit(updatedSorting.toList())
+        }
+    }
+
+    fun search(searchQuery: String) {
+        this.searchQuery = searchQuery
+        dataJob?.cancel()
+        dataJob = viewModelScope.launch {
+            shoppingListRepository.searchShoppingList(searchQuery, selectedFilter, selectedSort)?.collect { shoppingList ->
+                _fullShoppingList.emit(shoppingList)
+                _showEmptyLayout.emit(shoppingList.isEmpty())
+            }
         }
     }
 
