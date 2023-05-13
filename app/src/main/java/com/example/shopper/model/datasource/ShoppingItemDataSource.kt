@@ -1,6 +1,7 @@
 package com.example.shopper.model.datasource
 
 import com.example.shopper.model.FilterAction
+import com.example.shopper.model.Sort
 import com.example.shopper.model.Sorting
 import com.example.shopper.model.db.entity.ShoppingItem
 import kotlinx.coroutines.flow.Flow
@@ -41,4 +42,7 @@ interface ShoppingItemDataSource {
      */
 
     suspend fun filterShoppingList(filter: FilterAction, sorting: Int = Sorting.Ascending.value): Flow<List<ShoppingItem>>
+
+
+    suspend fun searchShoppingList(searchQuery: String, selectedFilter: FilterAction? = null, selectedSorting: Sorting? = null): Flow<List<ShoppingItem>>
 }

@@ -6,18 +6,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -27,6 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.shopper.R
+import com.example.shopper.model.Option
 import com.example.shopper.ui.theme.White
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -37,30 +33,58 @@ fun ShopperToolbar(
     enableBackButton: Boolean = false,
     onBackClick: () -> Unit = {},
     navigator: DestinationsNavigator? = null,
+    options: List<Option>? = null,
     content: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
         modifier = modifier,
         backgroundColor = MaterialTheme.colors.primaryVariant,
-        contentPadding = PaddingValues(horizontal = 20.dp)
+        contentPadding = PaddingValues(horizontal = 20.dp),
     ) {
-        if (enableBackButton) {
-            Icon(
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (enableBackButton) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(end = 10.dp)
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .clickable {
+                                navigator?.navigateUp()
+                                onBackClick()
+                            }
+                            .padding(6.dp),
+                        painter = painterResource(id = R.drawable.arrow_back),
+                        contentDescription = stringResource(R.string.back_button),
+                        tint = Color.White
+                    )
+                }
+                Text(text = title, fontWeight = FontWeight.Bold, color = White)
+            }
+            Row(
                 modifier = Modifier
-                    .padding(end = 10.dp)
-                    .size(32.dp)
-                    .clip(CircleShape)
-                    .clickable {
-                        navigator?.navigateUp()
-                        onBackClick()
+            ) {
+                options?.forEach { option ->
+                    IconButton(
+                        onClick = {
+                            option.onClick(option.optionType)
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = option.icon),
+                            contentDescription = "option icon",
+                            tint = White
+                        )
                     }
-                    .padding(6.dp),
-                painter = painterResource(id = R.drawable.arrow_back),
-                contentDescription = stringResource(R.string.back_button),
-                tint = Color.White
-            )
+                }
+            }
         }
-        Text(text = title, fontWeight = FontWeight.Bold, color = White)
         content()
     }
 }
