@@ -63,7 +63,6 @@ class ShoppingItemDetailViewModel @Inject constructor(
 
     fun setShoppingItem(shoppingItem: ShoppingItem?) {
         shoppingItem?.let { item ->
-//            id = if (item.id != 0) item.id else null
             id = item.id
             setName(TextFieldValue(item.name))
             item.description?.let { desc ->
@@ -88,7 +87,7 @@ class ShoppingItemDetailViewModel @Inject constructor(
         }
     }
 
-    private fun updateShoppingItem(shoppingItem: ShoppingItem) {
+    fun updateShoppingItem(shoppingItem: ShoppingItem) {
         viewModelScope.launch {
             detailRepository.updateShoppingItem(shoppingItem)
         }
