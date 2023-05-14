@@ -1,13 +1,9 @@
-package com.example.shopper
+package com.example.shopper.model.db
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.example.shopper.model.FilterAction
 import com.example.shopper.model.Sorting
-import com.example.shopper.model.datasource.ShoppingDbDataSource
-import com.example.shopper.model.datasource.ShoppingItemDataSource
-import com.example.shopper.model.db.AppDatabase
-import com.example.shopper.model.db.ShoppingItemDao
 import com.example.shopper.model.db.entity.ShoppingItem
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -16,11 +12,10 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class ShoppingItemDataSourceTest {
+class ShoppingItemDaoTest {
 
     lateinit var appDatabase: AppDatabase
     lateinit var shoppingItemDao: ShoppingItemDao
-    lateinit var shoppingItemDataSource: ShoppingItemDataSource
 
     @Before
     fun setup() {
@@ -29,17 +24,15 @@ class ShoppingItemDataSourceTest {
             AppDatabase::class.java
         ).allowMainThreadQueries().build()
         shoppingItemDao = appDatabase.shoppingItemDao()
-        shoppingItemDataSource = ShoppingDbDataSource(shoppingItemDao)
     }
-
 
     @Test
     fun insertShoppingItem_expectedSingleItem() = runBlocking {
         val item = ShoppingItem(name = "Tomato", description = "Red color Vegetable", quantity = 2)
 
-        shoppingItemDataSource.addShoppingItem(item)
+        shoppingItemDao.insert(item)
 
-        val result = shoppingItemDataSource.getAllShoppingItems().first()
+        val result = shoppingItemDao.getAll().first()
 
         Assert.assertEquals(1, result.size)
         Assert.assertEquals(item.copy(id = 1), result[0])
@@ -51,9 +44,9 @@ class ShoppingItemDataSourceTest {
         val onion = ShoppingItem(name = "Onion", quantity = 1)
         val rice = ShoppingItem(name = "Rice", quantity = 3)
 
-        shoppingItemDataSource.addShoppingItem(tomato, onion, rice)
+        shoppingItemDao.insert(tomato, onion, rice)
 
-        val result = shoppingItemDataSource.getAllShoppingItems().first()
+        val result = shoppingItemDao.getAll().first()
 
         Assert.assertEquals(3, result.size)
         Assert.assertEquals(tomato.copy(id = 1), result[0])
@@ -64,10 +57,10 @@ class ShoppingItemDataSourceTest {
     @Test
     fun deleteShoppingItem_expectedNoItem() = runBlocking {
         val item = ShoppingItem(name = "Tomato", description = "Red color Vegetable", quantity = 2)
-        shoppingItemDataSource.addShoppingItem(item)
-        shoppingItemDataSource.deleteShoppingItem(item.copy(id = 1))
+        shoppingItemDao.insert(item)
+        shoppingItemDao.delete(item.copy(id = 1))
 
-        val result = shoppingItemDataSource.getAllShoppingItems().first()
+        val result = shoppingItemDao.getAll().first()
 
         Assert.assertEquals(0, result.size)
     }
@@ -75,12 +68,12 @@ class ShoppingItemDataSourceTest {
     @Test
     fun updateShoppingItem_expectedNoItem() = runBlocking {
         val item = ShoppingItem(name = "Tomato", description = "Red color Vegetable", quantity = 2)
-        shoppingItemDataSource.addShoppingItem(item)
-        val result = shoppingItemDataSource.getAllShoppingItems().first()
+        shoppingItemDao.insert(item)
+        val result = shoppingItemDao.getAll().first()
 
         Assert.assertEquals(item.copy(id = 1), result[0])
-        shoppingItemDataSource.updateShoppingItem(item.copy(id = 1, quantity = 3))
-        val updateResult = shoppingItemDataSource.getAllShoppingItems().first()
+        shoppingItemDao.update(item.copy(id = 1, quantity = 3))
+        val updateResult = shoppingItemDao.getAll().first()
         Assert.assertNotEquals(item.copy(id = 1), updateResult[0])
         Assert.assertEquals(item.copy(id = 1, quantity = 3), updateResult[0])
     }
@@ -90,11 +83,11 @@ class ShoppingItemDataSourceTest {
         val tomato = ShoppingItem(name = "Tomato", description = "Red color Vegetable", quantity = 2, isBought = true)
         val onion = ShoppingItem(name = "Onion", quantity = 1)
         val rice = ShoppingItem(name = "rice", quantity = 2)
-        shoppingItemDataSource.addShoppingItem(tomato, onion, rice)
-        val result = shoppingItemDataSource.getAllShoppingItems().first()
+        shoppingItemDao.insert(tomato, onion, rice)
+        val result = shoppingItemDao.getAll().first()
         Assert.assertEquals(3, result.size)
 
-        val searchResult = shoppingItemDataSource.searchShoppingList("", FilterAction.Unbought, Sorting.Ascending).first()
+        val searchResult = shoppingItemDao.search("", FilterAction.Unbought.ordinal, Sorting.Ascending.value).first()
 
         Assert.assertEquals(2, searchResult.size)
 
@@ -103,9 +96,9 @@ class ShoppingItemDataSourceTest {
         }
     }
 
-
     @After
     fun tearDown() {
         appDatabase.close()
     }
+
 }
