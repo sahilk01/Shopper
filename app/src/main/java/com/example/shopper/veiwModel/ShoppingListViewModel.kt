@@ -9,7 +9,6 @@ import com.example.shopper.model.Sorting
 import com.example.shopper.model.db.entity.ShoppingItem
 import com.example.shopper.model.repository.shoppingDetail.ShoppingItemDetailRepository
 import com.example.shopper.model.repository.shoppingList.ShoppingListRepository
-import com.example.shopper.util.logD
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
