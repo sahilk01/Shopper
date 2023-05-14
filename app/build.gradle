@@ -12,6 +12,20 @@ kapt {
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('/Users/koo/Documents/shopperkey')
+            storePassword 'bestshopper'
+            keyAlias 'key0'
+            keyPassword 'bestshopper'
+        }
+        release {
+            storeFile file('/Users/koo/Documents/shopperkey')
+            storePassword 'bestshopper'
+            keyAlias 'key0'
+            keyPassword 'bestshopper'
+        }
+    }
     namespace 'com.example.shopper'
     compileSdk 33
 
