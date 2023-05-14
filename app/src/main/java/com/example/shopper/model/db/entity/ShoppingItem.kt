@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = ShoppingItem.TABLE_NAME)
 data class ShoppingItem(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Int? = null,
 
     @ColumnInfo("name")
     val name: String,
